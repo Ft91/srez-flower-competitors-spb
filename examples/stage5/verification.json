@@ -1,0 +1,145 @@
+{
+  "checked_at": "2026-09-18T21:44:44.037444+00:00",
+  "captures": [
+    {
+      "id": "8f7a8af441f24a8581a1b30cc058a62e",
+      "created_at": "2026-09-18T21:44:46.017198+00:00",
+      "finished_at": "2026-09-18T21:45:05.999433+00:00",
+      "kind": "capture",
+      "competitor_id": "7flowers",
+      "parent_id": null,
+      "status": "failed",
+      "source": {
+        "name": "7ЦВЕТОВ",
+        "url": "https://www.7flowers.ru/?geo=spb",
+        "captured_at": null
+      },
+      "artifacts": {},
+      "result": null,
+      "error": {
+        "code": "browser_error",
+        "message": "Не удалось собрать страницу. Проверьте Chrome, драйвер и доступ к сайту."
+      }
+    },
+    {
+      "id": "ee149e7d297e437499cbf93ca893e85a",
+      "created_at": "2026-09-18T21:45:06.030439+00:00",
+      "finished_at": "2026-09-18T21:45:21.368037+00:00",
+      "kind": "capture",
+      "competitor_id": "optflor",
+      "parent_id": null,
+      "status": "failed",
+      "source": {
+        "name": "OptFlor",
+        "url": "https://www.optflor.com/",
+        "captured_at": null
+      },
+      "artifacts": {},
+      "result": null,
+      "error": {
+        "code": "browser_error",
+        "message": "Не удалось собрать страницу. Проверьте Chrome, драйвер и доступ к сайту."
+      }
+    },
+    {
+      "id": "6ef2bcba220a4064ac60b7e7f29f33c1",
+      "created_at": "2026-09-18T21:45:21.399039+00:00",
+      "finished_at": "2026-09-18T21:45:36.868076+00:00",
+      "kind": "capture",
+      "competitor_id": "florografia",
+      "parent_id": null,
+      "status": "failed",
+      "source": {
+        "name": "Флорография",
+        "url": "https://florografia.ru/",
+        "captured_at": null
+      },
+      "artifacts": {},
+      "result": null,
+      "error": {
+        "code": "browser_error",
+        "message": "Не удалось собрать страницу. Проверьте Chrome, драйвер и доступ к сайту."
+      }
+    },
+    {
+      "id": "00606ac6bad44f64bfdd0a59f1f353ec",
+      "created_at": "2026-09-18T21:45:36.933077+00:00",
+      "finished_at": "2026-09-18T21:45:45.658154+00:00",
+      "kind": "capture",
+      "competitor_id": "tsvetomania",
+      "parent_id": null,
+      "status": "failed",
+      "source": {
+        "name": "Цветомания опт",
+        "url": "https://opt.tsvetomania.ru/",
+        "captured_at": null
+      },
+      "artifacts": {},
+      "result": null,
+      "error": {
+        "code": "browser_error",
+        "message": "Не удалось собрать страницу. Проверьте Chrome, драйвер и доступ к сайту."
+      }
+    }
+  ],
+  "demo": {
+    "success": false,
+    "items": [
+      {
+        "capture": {
+          "id": "e505828860054876a5c08103373c1680",
+          "created_at": "2026-09-18T21:45:45.726113+00:00",
+          "finished_at": "2026-09-18T21:45:54.465307+00:00",
+          "kind": "capture",
+          "competitor_id": "floradomspb",
+          "parent_id": null,
+          "status": "failed",
+          "source": {
+            "name": "ФлораДомСПБ",
+            "url": "https://floradomspb.ru/",
+            "captured_at": null
+          },
+          "artifacts": {},
+          "result": null,
+          "error": {
+            "code": "browser_error",
+            "message": "Не удалось собрать страницу. Проверьте Chrome, драйвер и доступ к сайту."
+          }
+        },
+        "analyses": [],
+        "error": null
+      }
+    ]
+  },
+  "repeat": {
+    "success": false,
+    "items": [
+      {
+        "id": "c017049ca72a400480f33b85f2b9b01a",
+        "created_at": "2026-09-18T21:45:54.561312+00:00",
+        "finished_at": "2026-09-18T21:46:03.425116+00:00",
+        "kind": "capture",
+        "competitor_id": "optflor",
+        "parent_id": null,
+        "status": "failed",
+        "source": {
+          "name": "OptFlor",
+          "url": "https://www.optflor.com/",
+          "captured_at": null
+        },
+        "artifacts": {},
+        "result": null,
+        "error": {
+          "code": "browser_error",
+          "message": "Не удалось собрать страницу. Проверьте Chrome, драйвер и доступ к сайту."
+        }
+      }
+    ]
+  },
+  "restart": {
+    "records_read": 6,
+    "all_persisted": true
+  },
+  "history_total": 6,
+  "finished_at": "2026-09-18T21:46:03.677119+00:00"
+}
