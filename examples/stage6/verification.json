@@ -1,0 +1,46 @@
+{
+  "version": "0.6.0",
+  "automated_tests_passed": 59,
+  "javascript_syntax": "passed",
+  "browser_checks": [
+    "overview",
+    "saved_capture_detail",
+    "example_mode",
+    "comparison_two_suppliers",
+    "text_detail_and_prices",
+    "visual_detail",
+    "history_supplier_filter",
+    "capture_form_mock_backend",
+    "text_form_mock_backend",
+    "image_upload_form_mock_backend"
+  ],
+  "responsive_widths": [
+    390,
+    1440
+  ],
+  "mobile_document_scroll_width": 375,
+  "mobile_comparison_container_width": 333,
+  "mobile_comparison_table_width": 1116,
+  "final_console_errors": [],
+  "new_external_requests": 0,
+  "screenshots": {
+    "comparison.png": {
+      "size": [
+        1425,
+        1721
+      ]
+    },
+    "mobile-overview.png": {
+      "size": [
+        375,
+        2470
+      ]
+    },
+    "overview.png": {
+      "size": [
+        1425,
+        1388
+      ]
+    }
+  }
+}
