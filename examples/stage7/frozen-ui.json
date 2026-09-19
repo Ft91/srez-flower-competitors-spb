@@ -1,0 +1,8 @@
+{
+  "ok": false,
+  "reason": "renderer_terminated",
+  "exit_code": 49,
+  "frozen": true,
+  "test": "desktop_ui",
+  "external_requests": 0
+}

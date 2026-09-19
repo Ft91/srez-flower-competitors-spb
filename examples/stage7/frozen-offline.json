@@ -1,0 +1,78 @@
+{
+  "test": "desktop_offline",
+  "frozen": true,
+  "external_requests": 0,
+  "checks": [
+    {
+      "name": "selenium_manager_packaged_and_executable",
+      "ok": true
+    },
+    {
+      "name": "frontend_resources",
+      "ok": true
+    },
+    {
+      "name": "blank_configuration_template",
+      "ok": true
+    },
+    {
+      "name": "private_env_not_bundled",
+      "ok": true
+    },
+    {
+      "name": "user_history_not_bundled",
+      "ok": true
+    },
+    {
+      "name": "health_without_key",
+      "ok": true
+    },
+    {
+      "name": "html",
+      "ok": true
+    },
+    {
+      "name": "css",
+      "ok": true
+    },
+    {
+      "name": "javascript",
+      "ok": true
+    },
+    {
+      "name": "three_saved_examples",
+      "ok": true
+    },
+    {
+      "name": "examples_do_not_change_history",
+      "ok": true
+    },
+    {
+      "name": "five_suppliers",
+      "ok": true
+    },
+    {
+      "name": "server_stops",
+      "ok": true
+    },
+    {
+      "name": "port_released",
+      "ok": true
+    },
+    {
+      "name": "history_survives_restart",
+      "ok": true
+    },
+    {
+      "name": "artifact_survives_restart",
+      "ok": true
+    },
+    {
+      "name": "restarted_server_stops",
+      "ok": true
+    }
+  ],
+  "ok": true,
+  "qt": "6.11.0",
+  "pyqt": "6.11.0"
+}

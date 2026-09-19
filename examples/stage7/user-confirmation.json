@@ -1,0 +1,8 @@
+{
+  "date": "2026-09-19",
+  "source": "user_message",
+  "app_launch_confirmed": true,
+  "user_statement": "пусто было окно cmd.exe, а само приложение запустилось",
+  "all_native_interactions_manually_tested": false,
+  "note": "Подтверждён запуск приложения; полный ручной прогон всех сценариев отдельно не заявлялся."
+}

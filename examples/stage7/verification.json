@@ -1,0 +1,20 @@
+{
+  "stage": 7,
+  "date": "2026-09-19",
+  "unit_tests_passed": 65,
+  "executable": "Srez.exe",
+  "executable_bytes": 230561521,
+  "sha256": "0140ef4c1d7f5eec1a1f929f518b38ac68f46a3a4948172f5e8331ccb62fd479",
+  "source_matches_frozen_desktop_modules": true,
+  "frozen_offline_ok": true,
+  "frozen_ui_ok": false,
+  "gui_status": "user_confirmed_app_launch",
+  "new_supplier_collections": 0,
+  "new_model_requests": 0,
+  "archive_entries": 1797,
+  "scanned_code_and_resources": 3453,
+  "private_env_in_executable": false,
+  "user_history_in_executable": false,
+  "configured_key_in_scanned_resources_or_code": false,
+  "user_launch_confirmation": "user-confirmation.json"
+}
