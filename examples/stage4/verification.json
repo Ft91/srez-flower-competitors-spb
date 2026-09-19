@@ -1,0 +1,66 @@
+{
+  "run_id": "20260918T212418Z",
+  "checked_at_utc": "2026-09-18T21:24:18.843901+00:00",
+  "schema_version": "0.4",
+  "cases": [
+    {
+      "kind": "text",
+      "competitor": "floradomspb",
+      "http_status": 200,
+      "elapsed_seconds": 15.39,
+      "success": true,
+      "response_file": "text-floradomspb.json",
+      "source_url": "https://floradomspb.ru/",
+      "input_sha256": "8c6a6e27c35d3e80bfb2091458d5a945068e0e9dc7cbd17a8b72373bcb041727",
+      "quotes_checked": 49,
+      "price_examples": 6,
+      "unknown_fields": [
+        "farm_names"
+      ]
+    },
+    {
+      "kind": "text",
+      "competitor": "optflor",
+      "http_status": 200,
+      "elapsed_seconds": 2.38,
+      "success": true,
+      "response_file": "text-optflor.json",
+      "source_url": "https://www.optflor.com/",
+      "input_sha256": "d0bf5376dc0209ce86cc207c47d93ec3ab0e426294c3bbffd6dea2c3030c69c9",
+      "quotes_checked": 3,
+      "price_examples": 0,
+      "unknown_fields": [
+        "origin_countries",
+        "farm_names",
+        "minimum_order",
+        "packaging_and_mixes",
+        "availability_and_preorder",
+        "delivery",
+        "payment",
+        "claims",
+        "ordering",
+        "quality_promises"
+      ]
+    },
+    {
+      "kind": "image",
+      "competitor": "floradomspb",
+      "http_status": 200,
+      "elapsed_seconds": 6.58,
+      "success": true,
+      "response_file": "image-floradomspb.json",
+      "source_url": "https://floradomspb.ru/",
+      "input_sha256": "30ef9fba731e30e0a305dc14ba8a9581acbb11becda4321d6230530be6405c61"
+    }
+  ],
+  "health": {
+    "status": "ok",
+    "api_key_configured": true,
+    "provider": "openai",
+    "provider_check": "not_performed_by_health_endpoint",
+    "text_model": "gpt-4.1-mini",
+    "image_model": "gpt-4.1-mini",
+    "note": "Это проверка локального сервера. Доступ к модели проверяется отдельным запросом анализа."
+  },
+  "server_stopped_after_check": true
+}

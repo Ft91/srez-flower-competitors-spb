@@ -1,0 +1,96 @@
+{
+  "success": true,
+  "schema_version": "0.4",
+  "input_type": "text",
+  "source": {
+    "name": "OptFlor",
+    "url": "https://www.optflor.com/",
+    "captured_at": "2026-09-18T19:35:40.368000Z"
+  },
+  "model": "gpt-4.1-mini",
+  "evidence_check": {
+    "mode": "text_quotes_matched",
+    "quotes_checked": 3,
+    "note": "Цитаты найдены в переданном тексте. Это не подтверждает выполнение обещаний поставщика и правильность всех выводов модели."
+  },
+  "price_checks": [],
+  "analysis": {
+    "summary": "По заявлению поставщика в изученном материале. Ассортимент: срезанные цветы.",
+    "facts": {
+      "assortment": {
+        "status": "stated_by_supplier",
+        "value": "срезанные цветы",
+        "evidence_quotes": [
+          "OptFlor. Цветы оптом со всего мира.",
+          "Цветы со всего мира",
+          "Цветы со всего мира"
+        ]
+      },
+      "origin_countries": {
+        "status": "not_stated",
+        "value": null,
+        "evidence_quotes": []
+      },
+      "farm_names": {
+        "status": "not_stated",
+        "value": null,
+        "evidence_quotes": []
+      },
+      "minimum_order": {
+        "status": "not_stated",
+        "value": null,
+        "evidence_quotes": []
+      },
+      "packaging_and_mixes": {
+        "status": "not_stated",
+        "value": null,
+        "evidence_quotes": []
+      },
+      "availability_and_preorder": {
+        "status": "not_stated",
+        "value": null,
+        "evidence_quotes": []
+      },
+      "delivery": {
+        "status": "not_stated",
+        "value": null,
+        "evidence_quotes": []
+      },
+      "payment": {
+        "status": "not_stated",
+        "value": null,
+        "evidence_quotes": []
+      },
+      "claims": {
+        "status": "not_stated",
+        "value": null,
+        "evidence_quotes": []
+      },
+      "ordering": {
+        "status": "not_stated",
+        "value": null,
+        "evidence_quotes": []
+      },
+      "quality_promises": {
+        "status": "not_stated",
+        "value": null,
+        "evidence_quotes": []
+      }
+    },
+    "price_examples": [],
+    "claimed_advantages": [],
+    "purchase_constraints": [],
+    "questions_to_supplier": [
+      "Какой минимальный заказ по сумме или количеству?",
+      "Какие способы оплаты, размер предоплаты и условия отсрочки?",
+      "Каковы стоимость и условия доставки по Санкт-Петербургу?",
+      "Как подать претензию по качеству или количеству и в какой срок?",
+      "Что есть в наличии и каковы сроки предзаказа?"
+    ],
+    "limitations": [
+      "Изучен только переданный материал; отсутствие сведений здесь не означает отсутствия услуги у поставщика.",
+      "Условия и обещания заявлены поставщиком; их выполнение и актуальность независимо не проверялись.",
+      "Наличие цитат не гарантирует правильную интерпретацию: соответствие вывода источнику требует проверки."
+    ]
+  }
+}
