@@ -1,0 +1,147 @@
+(() => {
+"use strict";
+const $=(q,s=document)=>s.querySelector(q), main=$("#main");
+const labels={assortment:"Ассортимент",origin_countries:"Страны происхождения",farm_names:"Фермы",minimum_order:"Минимальный заказ",packaging_and_mixes:"Упаковка и миксы",availability_and_preorder:"Наличие и предзаказ",delivery:"Доставка по СПб",payment:"Оплата",claims:"Претензии и брак",ordering:"Как заказать",quality_promises:"Обещания качества"};
+const visuals={readability:"Читаемость",b2b_offer_clarity:"Предложение для опта",navigation_clarity:"Навигация",contact_visibility:"Контакты",ordering_path_clarity:"Путь к заказу"};
+const pages={overview:"Обзор",analysis:"Новый анализ",comparison:"Сравнение",history:"История"};
+const kinds={capture:"Снимок сайта",text:"Анализ текста",image:"Анализ изображения"};
+const state={data:null,example:false,page:"overview",tab:"site",supplier:"floradomspb",text:"",file:null,fileUrl:null,sourceUrl:"",mode:"collect",busy:false,operation:null,selected:new Set(["7flowers","optflor","floradomspb","florografia","tsvetomania"]),historyKind:"",historySupplier:"",offset:0,limit:10,records:new Map()};
+let loadToken=0,historyToken=0,toastTimer;
+const e=value=>String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function date(value){const d=new Date(value);return !value||Number.isNaN(d.getTime())?"не указана":new Intl.DateTimeFormat("ru-RU",{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit",timeZone:"Europe/Moscow"}).format(d);}
+function safeUrl(value){try{const u=new URL(value,location.origin);return ["http:","https:"].includes(u.protocol)?u.href:"#";}catch{return "#";}}
+const internal=value=>typeof value==="string"&&/^\/(history\/[a-f0-9]{32}\/files\/|static\/)/.test(value)?value:"";
+function domain(value){try{return new URL(value).hostname.replace(/^www\./,"");}catch{return "Источник";}}
+const badge=(text,cls="")=>'<span class="badge '+cls+'">'+e(text)+'</span>';
+const quote=items=>items?.length?'<details class="quote"><summary>Фрагмент источника</summary>'+items.map(q=>'<blockquote>'+e(q)+'</blockquote>').join("")+'</details>':"";
+const list=(title,items)=>items?.length?'<section class="detail-section"><h3>'+e(title)+'</h3><ul>'+items.map(t=>'<li>'+e(t)+'</li>').join("")+'</ul></section>':"";
+const head=(title,description,action="")=>'<div class="page-head"><div><h1>'+e(title)+'</h1><p>'+e(description)+'</p></div>'+action+'</div>';
+const source=s=>'<div class="source-line">'+(s?.url?'<a href="'+e(safeUrl(s.url))+'" target="_blank" rel="noopener noreferrer">'+e(domain(s.url))+' ↗</a>':"")+'<span>Материал от '+e(date(s?.captured_at))+' · МСК</span></div>';
+function toast(message,error=false){clearTimeout(toastTimer);const box=$("#toast");box.textContent=message;box.className="toast"+(error?" error":"");box.hidden=false;toastTimer=setTimeout(()=>box.hidden=true,7000);}
+async function api(path,options={}){let r;try{r=await fetch(path,options);}catch{throw new Error("Нет связи с сервером. Проверьте запуск start.ps1.");}let b;try{b=await r.json();}catch{throw new Error("Сервер вернул непонятный ответ.");}if(!r.ok)throw new Error(b.error?.message||(r.status===422?"Проверьте заполнение полей и формат файла.":"Не удалось выполнить запрос."));return b;}
+const post=(path,body)=>api(path,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+function chrome(){document.querySelectorAll("nav a").forEach(a=>{a.classList.toggle("active",a.dataset.page===state.page);if(a.dataset.page===state.page)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current");});$("#breadcrumb").textContent="Рабочее пространство / "+pages[state.page];$("#example-banner").hidden=!state.example;$("#example-toggle").textContent=state.example?"Мои данные":"Учебный пример";document.title=pages[state.page]+" · Срез";}
+async function load(renderAfter=true){const token=++loadToken;const data=await api(state.example?"/examples/workspace":"/workspace");if(token!==loadToken)return;state.data=data;for(const item of data.items)for(const kind of ["capture","text","image"])if(item[kind])state.records.set(item[kind].id,item[kind]);if(renderAfter)render();}
+function render(){chrome();if(!state.data)return;({overview,analysis:analysisForm,comparison,history})[state.page]();}
+function overview(){
+ const s=state.data.summary;
+ main.innerHTML=head("Обзор поставщиков","Оптовые цветы · Санкт-Петербург",'<a class="button" href="#analysis">Новый анализ <span>＋</span></a>')+
+ '<section class="hero"><div class="hero-text"><span class="eyebrow">ОТ ИСТОЧНИКА — К РЕШЕНИЮ</span><h2>Поставщики, которых<br>стоит знать.</h2><p>Соберите условия закупки, сохраните источники<br>и сравните предложения по одним критериям.</p></div><div class="hero-art" aria-hidden="true"><svg viewBox="0 0 230 245"><g fill="none" stroke="#698363" stroke-width="1.1"><path d="M118 228C119 170 132 100 112 65M121 181C99 150 76 146 63 147C64 165 89 183 121 181ZM126 154C153 122 179 124 183 133C168 156 146 160 126 154ZM123 125C98 104 82 105 72 110C84 129 104 137 123 125Z"/><path fill="#dde7d2" d="M113 69C66 48 62 19 79 20C91 18 104 35 109 48C103 13 121 1 129 16C135 24 129 38 126 47C145 19 160 23 156 36C153 52 136 61 113 69Z"/><path d="M112 66C99 60 88 45 84 33M113 66C118 51 122 31 121 20M116 66C132 57 140 47 149 35M125 155L173 137M121 181L76 155M123 125L84 114"/><ellipse cx="130" cy="229" rx="53" ry="5" stroke="#c9d4bd"/></g></svg><span class="annotation">Flora · Saint Petersburg</span></div></section>'+
+ '<div class="stats"><div class="stat"><strong>'+s.competitors+'</strong><span>поставщиков в подборке</span></div><div class="stat"><strong>'+s.captures+'</strong><span>сохранённых страниц</span></div><div class="stat"><strong>'+s.analyses+'</strong><span>'+(state.example?"анализов в примере":"готовых анализов")+'</span></div></div><div class="section-head"><div><h2>Ваша подборка</h2><p>Последние сохранённые результаты по каждому поставщику</p></div><a class="text-button" href="#comparison">К сравнению ↗</a></div><div class="supplier-grid">'+state.data.items.map((item,i)=>{
+ const record=item.text||item.image||item.capture,ready=!!(item.text||item.image);
+ const unknown=item.text?Object.values(item.text.result.analysis.facts).filter(f=>f.status!=="stated_by_supplier").length:0;
+ return '<article class="supplier-card"><div class="card-top"><span class="monogram">'+e(["7","O","Фд","Ф","Ц"][i])+'</span><span class="ordinal">0'+(i+1)+'</span></div><h3>'+e(item.name)+'</h3><a class="domain" href="'+e(safeUrl(item.url))+'" target="_blank" rel="noopener noreferrer">'+e(domain(item.url))+' ↗</a><div>'+badge(ready?"Есть анализ":item.capture?"Страница сохранена":"Пока без анализа",ready?"":item.capture?"attention":"neutral")+(unknown?' '+badge("Уточнить: "+unknown,"attention"):"")+'</div><p class="card-meta">'+(record?e(date(record.created_at)):"Начните с сайта, текста или изображения")+'</p><div class="card-bottom">'+(record?'<button data-record="'+e(record.id)+'">Открыть '+(ready?"результат":"материал")+'</button>':'<button data-new="'+e(item.id)+'">Добавить материал</button>')+'<span class="arrow" aria-hidden="true">↗</span></div></article>';
+ }).join("")+'</div><div class="notice"><strong>Сначала условия, потом цена.</strong> Сравнивайте одинаковые сорта, длину стебля, упаковку и единицу цены. Отсутствие сведений на странице не означает отсутствие услуги.</div>';
+}
+function options(allowNone=false){return (allowNone?'<option value="" '+(!state.supplier?"selected":"")+'>Без привязки к поставщику</option>':"")+state.data.items.map(i=>'<option value="'+e(i.id)+'" '+(i.id===state.supplier?"selected":"")+'>'+e(i.name)+'</option>').join("");}
+function operation(){const o=state.operation;return o?'<div class="notice '+(o.error?"error":"")+'" role="status"><strong>'+e(o.title)+'</strong>'+o.items.map(i=>'<p style="margin:8px 0 0">'+e(i.label)+(i.id?' · <button class="text-button" data-record="'+e(i.id)+'">Открыть результат ↗</button>':"")+'</p>').join("")+'</div>':"";}
+function analysisForm(){
+ main.innerHTML=head("Новый анализ","Один материал — один понятный результат.");
+ if(state.example){main.innerHTML+='<div class="empty-state"><h3>Сейчас открыт учебный пример</h3><p>Для сбора сайта или загрузки собственного материала вернитесь к своим данным.</p><button class="button" data-toggle-example>Перейти к моим данным</button></div>';return;}
+ if(state.tab==="site"&&!state.supplier)state.supplier="floradomspb";
+ const item=state.data.items.find(i=>i.id===state.supplier);
+ main.innerHTML+='<div class="two-columns"><section class="panel"><div class="tabs" role="tablist" aria-label="Тип материала">'+[["site","Сайт"],["text","Текст"],["image","Изображение"]].map(([k,t])=>'<button type="button" role="tab" aria-selected="'+(state.tab===k)+'" class="tab '+(state.tab===k?"active":"")+'" data-tab="'+k+'">'+t+'</button>').join("")+'</div><form id="analysis-form"><div class="field"><label for="supplier">Поставщик</label><select id="supplier">'+options(state.tab!=="site")+'</select><p class="hint">Результат появится в карточке выбранного поставщика.</p></div>'+
+ (state.tab==="site"?'<div class="field"><span class="field-label">Страница для сбора</span><div class="url-field">'+e(item?.url)+'</div></div><div class="field"><span class="field-label">Что сделать</span><label class="radio-option"><input type="radio" name="collect-mode" value="collect" '+(state.mode==="collect"?"checked":"")+'><span>Сохранить страницу<small>Текст и два скриншота. Без обращения к ИИ.</small></span></label><label class="radio-option"><input type="radio" name="collect-mode" value="analyze" '+(state.mode==="analyze"?"checked":"")+'><span>Собрать и проанализировать<small>Условия из текста и оценка первого экрана. Два платных запроса к ИИ.</small></span></label></div>':
+ '<div class="field"><label for="source-url">Ссылка на источник <span class="muted">· необязательно</span></label><input id="source-url" type="url" placeholder="https://..." value="'+e(state.sourceUrl)+'"></div>'+
+ (state.tab==="text"?'<div class="field"><label for="source-text">Текст страницы или предложения</label><textarea id="source-text" required minlength="10" maxlength="40000" placeholder="Вставьте ассортимент, условия закупки, доставки или цены…">'+e(state.text)+'</textarea><p id="text-count" class="hint">'+state.text.length.toLocaleString("ru-RU")+' / 40 000 символов · минимум 10</p></div>':
+ '<div class="field"><label for="source-file">Скриншот или изображение</label><div class="upload"><div>PNG, JPEG или WEBP</div><p class="hint">До 8 МБ · один статичный кадр</p><input type="file" id="source-file" accept="image/png,image/jpeg,image/webp" '+(!state.file?"required":"")+'>'+(state.file?'<p class="hint" style="margin-top:12px">'+e(state.file.name)+'</p><img class="file-preview" src="'+e(state.fileUrl)+'" alt="Выбранное изображение">':"")+'</div></div>'))+
+ '<div class="form-footer"><button class="button" type="submit" '+(state.busy?"disabled":"")+'>'+(state.busy?"Выполняется…":state.tab==="site"?(state.mode==="collect"?"Сохранить страницу":"Собрать и проанализировать"):"Проанализировать")+' <span>↗</span></button><p class="hint">'+(state.tab==="site"&&state.mode==="collect"?"Материал останется в локальной истории.":"Материал будет отправлен выбранному сервису ИИ. Запрос расходует баланс API.")+'</p></div></form>'+
+ (state.busy?'<div class="job-state" role="status">Запрос выполняется. Можно перейти в историю; не запускайте его повторно.</div>':"")+operation()+'</section><aside class="panel aside-help"><span class="eyebrow">КАК ЭТО РАБОТАЕТ</span><h3>Каждое условие<br>со своим источником.</h3><ol><li>Выберите поставщика и добавьте материал.</li><li>Получите условия опта, примеры цен или оценку оформления.</li><li>Проверьте цитаты и уточните то, чего нет в источнике.</li></ol><p>Сбор сайта сохраняет главную страницу. Каталоги и прайсы по ссылкам автоматически не открываются.</p><p>PDF и Excel в этой версии ещё не загружаются.</p></aside></div>';
+ $("#supplier").addEventListener("change",ev=>{state.supplier=ev.target.value;analysisForm();});
+ $("#source-text")?.addEventListener("input",ev=>{state.text=ev.target.value;$("#text-count").textContent=state.text.length.toLocaleString("ru-RU")+" / 40 000 символов · минимум 10";});
+ $("#source-url")?.addEventListener("input",ev=>state.sourceUrl=ev.target.value);
+ $("#source-file")?.addEventListener("change",ev=>{const f=ev.target.files[0];if(!f)return;if(f.size>8*1024*1024){ev.target.value="";toast("Файл больше 8 МБ. Выберите изображение поменьше.",true);return;}if(!["image/png","image/jpeg","image/webp"].includes(f.type)){ev.target.value="";toast("Поддерживаются PNG, JPEG и WEBP.",true);return;}if(state.fileUrl)URL.revokeObjectURL(state.fileUrl);state.file=f;state.fileUrl=URL.createObjectURL(f);analysisForm();});
+ document.querySelectorAll('input[name="collect-mode"]').forEach(i=>i.addEventListener("change",ev=>{state.mode=ev.target.value;analysisForm();}));
+ $("#analysis-form").addEventListener("submit",submit);
+}
+async function submit(ev){
+ ev.preventDefault();if(state.busy)return;
+ if(state.tab==="text"&&state.text.trim().length<10){toast("Введите хотя бы 10 символов содержательного текста.",true);return;}
+ if(state.tab==="image"&&!state.file){toast("Выберите изображение.",true);return;}
+ const selected=state.data.items.find(i=>i.id===state.supplier),name=selected?.name||"Материал пользователя",tab=state.tab;
+ const supplier=state.supplier,mode=state.mode,text=state.text,file=state.file,sourceUrl=state.sourceUrl;
+ state.busy=true;state.operation=null;analysisForm();
+ try{
+ let result,items=[],success=true;
+ if(tab==="site"){
+ const parsed=mode==="analyze";result=await post(parsed?"/parsedemo":"/collect",{competitor_ids:[supplier]});success=result.success;
+ if(parsed){const entry=result.items[0];items.push({label:entry.capture.status==="completed"?"Страница сохранена":entry.capture.error?.message||"Сбор не завершён",id:entry.capture.id});for(const a of entry.analyses)items.push({label:a.success?kinds[a.kind]+" готов":a.error.message,id:a.result?.history_id});if(entry.error)items.push({label:entry.error.message});}
+ else for(const c of result.items)items.push({label:c.status==="completed"?"Страница сохранена":c.error?.message||"Сбор не завершён",id:c.id});
+ }else if(tab==="text"){
+ result=await post("/analyze_text",{text,competitor_id:supplier||null,source_name:name,source_url:sourceUrl||null});
+ items.push({label:"Условия закупки извлечены. Проверьте цитаты.",id:result.history_id});
+ }else{
+ const form=new FormData();form.append("file",file);form.append("source_name",name);if(supplier)form.append("competitor_id",supplier);if(sourceUrl)form.append("source_url",sourceUrl);
+ result=await api("/analyze_image",{method:"POST",body:form});items.push({label:"Визуальный анализ готов. Оценка относится только к этому изображению.",id:result.history_id});
+ }
+ state.operation={title:success?"Готово":"Запрос завершён с замечаниями",items,error:!success};toast(success?"Результат сохранён в истории.":"Проверьте замечания к запросу.",!success);await load(false);
+ }catch(error){state.operation={title:"Не удалось завершить запрос",items:[{label:error.message}],error:true};toast(error.message,true);}
+ finally{state.busy=false;render();}
+}
+function comparison(){
+ const items=state.data.items.filter(i=>state.selected.has(i.id)),ready=items.filter(i=>i.text).length;
+ main.innerHTML=head("Сравнение условий","Одинаковые критерии для всех поставщиков. Без общего рейтинга.",'<button class="button secondary" data-refresh>Обновить</button>')+
+ '<div class="compare-picks">'+state.data.items.map(i=>'<label class="pick"><input type="checkbox" data-compare="'+e(i.id)+'" '+(state.selected.has(i.id)?"checked":"")+'>'+e(i.name)+'</label>').join("")+'</div><div class="notice '+(ready<2?"warning":"")+'">'+(ready<2?"Для содержательного сравнения нужны хотя бы два текстовых анализа. Можно открыть учебный пример с сохранёнными ответами.":"В таблице — последние успешные анализы выбранных поставщиков. Условия подтверждены только изученным материалом.")+'</div>'+
+ (items.length?'<div class="table-wrap" tabindex="0" aria-label="Таблица условий, при необходимости прокрутите горизонтально"><table class="comparison-table" style="min-width:'+Math.max(660,166+items.length*190)+'px"><thead><tr><th scope="col">Условия закупки</th>'+items.map(i=>'<th scope="col">'+e(i.name)+(i.notes?.length?'<br>'+badge('Нужна сверка','attention'):'')+'<small>'+(i.text?"Материал: "+e(date(i.text.source?.captured_at)):"Текст ещё не проанализирован")+'</small>'+(i.text?'<button class="text-button" data-record="'+e(i.text.id)+'">Открыть анализ</button>':"")+'</th>').join("")+'</tr></thead><tbody>'+
+ Object.entries(labels).map(([key,label])=>'<tr><th scope="row">'+label+'</th>'+items.map(i=>{const f=i.text?.result.analysis.facts[key];return '<td class="'+(!f||f.status!=="stated_by_supplier"?"empty":"")+'">'+(f&&f.status!=="not_stated"?(f.status==="conflicting"?badge("Противоречие","attention")+"<br>":"")+e(f.value)+quote(f.evidence_quotes):f?"Не указано в материале":"Нет анализа")+'</td>';}).join("")+'</tr>').join("")+
+ '<tr><th scope="row">Оформление сайта<small>Субъективная оценка экрана</small></th>'+items.map(i=>'<td>'+(i.image?e(i.image.result.analysis.design_score??"—")+" / 10"+'<br><button class="text-button" data-record="'+e(i.image.id)+'">Почему такая оценка</button>':"Нет оценки")+'</td>').join("")+'</tr></tbody></table></div>':'<div class="empty-state"><h3>Выберите поставщиков</h3><p>Отметьте хотя бы одного поставщика над таблицей.</p></div>')+
+ items.flatMap(i=>i.notes||[]).map(n=>'<div class="notice warning">'+e(n)+'</div>').join("")+'<div class="notice"><strong>Цена требует отдельной сверки.</strong> Примеры цен находятся в полном анализе. Для сравнения должны совпасть сорт, длина, упаковка, валюта, единица измерения и дата цены.</div>';
+ document.querySelectorAll("[data-compare]").forEach(i=>i.addEventListener("change",ev=>{if(ev.target.checked)state.selected.add(ev.target.dataset.compare);else state.selected.delete(ev.target.dataset.compare);comparison();}));
+}
+async function history(){
+ const token=++historyToken;
+ main.innerHTML=head("История","Снимки, анализы и неудачные попытки сохраняются после закрытия приложения.",'<button class="button secondary" data-refresh>Обновить</button>')+
+ '<div class="filters"><select id="history-supplier" aria-label="Поставщик в истории"><option value="">Все поставщики</option>'+state.data.items.map(i=>'<option value="'+e(i.id)+'" '+(state.historySupplier===i.id?"selected":"")+'>'+e(i.name)+'</option>').join("")+'</select><select id="history-kind" aria-label="Тип записи"><option value="">Все материалы</option>'+Object.entries(kinds).map(([k,label])=>'<option value="'+k+'" '+(state.historyKind===k?"selected":"")+'>'+label+'</option>').join("")+'</select></div><div id="history-content" class="loading">Загружаем историю…</div>';
+ $("#history-supplier").addEventListener("change",ev=>{state.historySupplier=ev.target.value;state.offset=0;history();});
+ $("#history-kind").addEventListener("change",ev=>{state.historyKind=ev.target.value;state.offset=0;history();});
+ try{
+ let data;
+ if(state.example){const rows=state.data.records.filter(r=>(!state.historyKind||r.kind===state.historyKind)&&(!state.historySupplier||r.competitor_id===state.historySupplier));data={items:rows.slice(state.offset,state.offset+state.limit),total:rows.length};}
+ else{const q=new URLSearchParams({limit:state.limit,offset:state.offset});if(state.historyKind)q.set("kind",state.historyKind);if(state.historySupplier)q.set("competitor_id",state.historySupplier);data=await api("/history?"+q);}
+ if(token!==historyToken||state.page!=="history")return;
+ const container=$("#history-content");container.className="";
+ container.innerHTML=data.items.length?'<div class="table-wrap"><table class="history-table"><thead><tr><th scope="col">Материал</th><th scope="col">Тип</th><th scope="col">Дата · МСК</th><th scope="col">Статус</th><th scope="col">Действие</th></tr></thead><tbody>'+data.items.map(r=>'<tr><td><span class="history-title">'+e(r.source?.name||"Без названия")+'</span><small>'+e(r.source?.url?domain(r.source.url):"Ручная загрузка")+'</small></td><td>'+e(kinds[r.kind])+'</td><td>'+e(date(r.created_at))+'</td><td>'+badge(r.status==="completed"?"Готово":r.status==="failed"?"Ошибка":"Не завершено",r.status==="failed"?"error":r.status==="running"?"attention":"")+'</td><td><button class="text-button" data-record="'+e(r.id)+'">Открыть ↗</button></td></tr>').join("")+'</tbody></table></div>':'<div class="empty-state"><h3>Здесь пока нет записей</h3><p>Измените фильтры или добавьте первый материал. Он останется в истории вместе с результатом.</p><a class="button secondary" href="#analysis">Добавить материал</a></div>';
+ container.innerHTML+='<div class="pager"><span>'+'Записей: '+data.total+(data.total?" · "+(state.offset+1)+"–"+Math.min(state.offset+state.limit,data.total):"")+'</span><div><button class="button secondary" data-history-page="-1" '+(state.offset===0?"disabled":"")+'>← Назад</button><button class="button secondary" data-history-page="1" '+(state.offset+state.limit>=data.total?"disabled":"")+'>Далее →</button></div></div>';
+ }catch(error){if(token===historyToken&&state.page==="history")$("#history-content").innerHTML='<div class="notice error">'+e(error.message)+'</div>';}
+}
+function textDetail(response){
+ const a=response.analysis;
+ return '<p style="font-size:13px;line-height:1.8">'+e(a.summary)+'</p><div class="facts-list">'+Object.entries(labels).map(([key,label])=>{const f=a.facts[key];return '<div class="fact"><div class="fact-label">'+label+'</div><div class="fact-value">'+(f.status==="not_stated"?badge("Не указано в материале","attention"):f.status==="conflicting"?badge("Противоречивые сведения","attention"):badge("Указано поставщиком"))+'<p>'+e(f.value||"")+'</p>'+quote(f.evidence_quotes)+'</div></div>';}).join("")+'</div>'+
+ '<section class="detail-section"><h3>Примеры цен</h3>'+(a.price_examples.length?'<div class="table-wrap"><table class="prices"><thead><tr><th>Товар</th><th>Цена</th><th>Упаковка и дата</th></tr></thead><tbody>'+a.price_examples.map((p,index)=>{const check=response.price_checks?.find(c=>c.example_index===index);return '<tr><td>'+e(p.flower)+'<small>Сорт: '+e(p.variety||"не указан")+' · '+e(p.stem_length_cm?p.stem_length_cm+" см":"длина не указана")+'</small>'+quote(p.evidence_quotes)+'</td><td>'+e((p.price_kind==="from"?"от ":"")+p.amount+" "+(p.currency||"валюта не указана"))+'<small>'+e(p.unit?{stem:"за стебель",bunch:"за пачку",box:"за коробку"}[p.unit]:"Единица цены не указана")+'</small></td><td>'+e(p.stems_per_box?p.stems_per_box+" стеблей в коробке":"Упаковка не указана")+'<small>Дата цены: '+e(p.valid_date_label||"не указана")+'</small>'+(p.conditions?'<small>'+e(p.conditions)+'</small>':"")+(check?.missing_parameters.length?'<p style="margin:8px 0 0">'+badge("Нужна сверка","attention")+'<small>'+e(check.missing_parameters.join(", "))+'</small></p>':"")+'</td></tr>';}).join("")+'</tbody></table></div>':'<p class="muted">Цены в изученном материале не найдены.</p>')+'</section>'+
+ list("Что уточнить у поставщика",a.questions_to_supplier)+
+ [["Заявленные преимущества",a.claimed_advantages],["Ограничения закупки",a.purchase_constraints]].map(([title,items])=>items.length?'<section class="detail-section"><h3>'+title+'</h3>'+items.map(f=>'<p>'+e(f.text)+'</p>'+quote(f.evidence_quotes)).join("")+'</section>':"").join("")+
+ list("Пределы анализа",[...a.limitations,...(response.input_notes||[])]);
+}
+function imageDetail(response){const a=response.analysis;return '<p>'+e(a.description)+'</p><div class="score-summary"><div class="score-number">'+e(a.design_score??"—")+'<small> / 10</small></div><p>'+e(a.design_score_reason)+'<br><strong>Оценка оформления, а не качества поставщика.</strong></p></div><div class="criteria">'+Object.entries(visuals).map(([k,label])=>'<div class="criterion">'+label+'<strong>'+e(a[k].score??"—")+' / 10</strong><p>'+e(a[k].reason)+'</p></div>').join("")+'</div>'+(a.visible_business_terms?.value?'<section class="detail-section"><h3>Условия на изображении</h3><p>'+e(a.visible_business_terms.value)+'</p>'+quote(a.visible_business_terms.evidence_quotes)+'</section>':"")+list("Что можно улучшить",a.recommendations)+list("Пределы анализа",[...a.limitations,...(response.input_notes||[])]);}
+async function showRecord(id){
+ try{
+ const r=id.startsWith("example-")?state.records.get(id):await api("/history/"+encodeURIComponent(id));if(!r)throw new Error("Запись не найдена.");
+ const notes=state.data.items.find(i=>i.id===r.competitor_id)?.notes||[];
+ let html='<h2 id="detail-title">'+e(r.source?.name||"Материал")+'</h2><span class="muted">'+e(kinds[r.kind])+(r.example?" · учебный пример":"")+'</span>'+source(r.source);
+ if(r.status==="failed")html+='<div class="notice error"><strong>Попытка завершилась ошибкой</strong><p style="margin:6px 0 0">'+e(r.error?.message||"Результат не получен.")+'</p></div>';
+ else if(r.status==="running")html+='<div class="notice warning">Попытка ещё не завершена. Если сервер был закрыт во время запроса, она могла прерваться. Эта запись не является готовым результатом.</div>';
+ else if(r.kind==="capture"){const m=r.result;html+='<p>'+e(m.title||"Снимок страницы")+'</p><div class="notice">'+e(m.text_characters)+' символов текста · первый экран '+e(m.viewport?.width||1440)+' × '+e(m.viewport?.height||900)+'</div>';const preview=internal(r.artifacts["viewport.png"]?.url);if(preview)html+='<img class="capture-preview" src="'+e(preview)+'" alt="Сохранённый первый экран '+e(r.source?.name)+'">';html+=list("Что учитывать",m.warnings||[]);}
+ else{html+=notes.map(n=>'<div class="notice warning">'+e(n)+'</div>').join("");html+=r.kind==="text"?textDetail(r.result):imageDetail(r.result);}
+ const links=Object.entries(r.artifacts||{}).filter(([,i])=>internal(i.url));
+ if(links.length)html+='<section class="detail-section"><h3>Исходные файлы</h3><div class="file-links">'+links.map(([name,i])=>'<a class="button secondary small" href="'+e(internal(i.url))+'" target="_blank" rel="noopener">'+e(name)+' ↗</a>').join("")+'</div></section>';
+ html+='<div class="dialog-actions"><button class="button secondary" id="download-record">Скачать JSON ↓</button></div>';
+ $("#detail-content").innerHTML=html;if(!$("#detail-dialog").open)$("#detail-dialog").showModal();$("#detail-dialog").scrollTop=0;
+ $("#download-record").addEventListener("click",()=>{const blob=new Blob([JSON.stringify(r,null,2)],{type:"application/json;charset=utf-8"}),link=document.createElement("a"),u=URL.createObjectURL(blob);link.href=u;link.download="srez-"+r.id+".json";link.click();setTimeout(()=>URL.revokeObjectURL(u),1000);});
+ }catch(error){toast(error.message,true);}
+}
+async function toggleExample(){if(state.busy){toast("Дождитесь завершения текущего запроса.");return;}state.example=!state.example;state.offset=0;state.operation=null;try{await load();}catch(error){state.example=!state.example;chrome();toast(error.message,true);}}
+document.addEventListener("click",ev=>{
+ const record=ev.target.closest("[data-record]");if(record){showRecord(record.dataset.record);return;}
+ const add=ev.target.closest("[data-new]");if(add){state.supplier=add.dataset.new;location.hash="analysis";return;}
+ const tab=ev.target.closest("[data-tab]");if(tab){state.tab=tab.dataset.tab;analysisForm();return;}
+ const p=ev.target.closest("[data-history-page]");if(p){state.offset=Math.max(0,state.offset+Number(p.dataset.historyPage)*state.limit);history();return;}
+ if(ev.target.closest("[data-toggle-example]"))toggleExample();
+ if(ev.target.closest("[data-refresh]"))load().then(()=>toast("Сохранённые данные обновлены.")).catch(error=>toast(error.message,true));
+});
+$("#example-toggle").addEventListener("click",toggleExample);$("#exit-example").addEventListener("click",toggleExample);
+$("#close-dialog").addEventListener("click",()=>$("#detail-dialog").close());
+$("#detail-dialog").addEventListener("click",ev=>{if(ev.target===$("#detail-dialog")){const r=ev.target.getBoundingClientRect();if(ev.clientX<r.left||ev.clientX>r.right||ev.clientY<r.top||ev.clientY>r.bottom)ev.target.close();}});
+window.addEventListener("hashchange",()=>{if(location.hash==="#main"){main.focus();return;}state.page=pages[location.hash.slice(1)]?location.hash.slice(1):"overview";render();});
+async function init(){state.page=pages[location.hash.slice(1)]?location.hash.slice(1):"overview";try{await load();const h=await api("/health");$("#connection").textContent=h.api_key_configured?"Ключ ИИ указан":"Ключ ИИ не указан";$("#connection").classList.remove("offline");}catch(error){$("#connection").textContent="Нет связи с сервером";$("#connection").classList.add("offline");main.innerHTML='<div class="empty-state"><h3>Не удалось загрузить данные</h3><p>'+e(error.message)+'</p><button class="button" id="retry-load">Попробовать снова</button></div>';$("#retry-load").addEventListener("click",init);}}
+init();
+})();
