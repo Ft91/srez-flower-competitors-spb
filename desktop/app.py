@@ -171,7 +171,7 @@ class MainWindow(QMainWindow):
             title: document.title,
             cards: document.querySelectorAll('.supplier-card').length,
             heading: document.querySelector('h1')?.textContent,
-            body: document.body.innerText.includes('Учебный пример'),
+            body: document.body.innerText.includes('Демонстрационный пример'),
             width: innerWidth
         })""", self.receive_smoke)
 
@@ -252,7 +252,7 @@ class MainWindow(QMainWindow):
         item.accept()
 
     def about(self):
-        QMessageBox.information(self, "Срез 0.7", "Оптовые цветы · Санкт-Петербург\nPyQt6 + Qt WebEngine + FastAPI\n\nУчебный пример работает без ключа. Для нового анализа нужен ключ провайдера; для сбора сайтов — Google Chrome.\n\nДокументация: docs/DESKTOP.md в исходниках.")
+        QMessageBox.information(self, "Срез 0.7", "Оптовые цветы · Санкт-Петербург\nPyQt6 + Qt WebEngine + FastAPI\n\nДемонстрационный пример работает без ключа. Для нового анализа нужен ключ провайдера; для сбора сайтов — Google Chrome.\n\nДокументация: docs/DESKTOP.md в исходниках.")
 
     def closeEvent(self, event):
         if not self.ensure_idle():
