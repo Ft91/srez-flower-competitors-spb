@@ -1,0 +1,161 @@
+{
+  "$defs": {
+    "SourceFact": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "stated_by_supplier",
+            "not_stated",
+            "conflicting"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "maxLength": 450,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Value"
+        },
+        "evidence_quotes": {
+          "items": {
+            "maxLength": 400,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 3,
+          "title": "Evidence Quotes",
+          "type": "array"
+        }
+      },
+      "required": [
+        "status",
+        "value",
+        "evidence_quotes"
+      ],
+      "title": "SourceFact",
+      "type": "object"
+    },
+    "VisualCriterion": {
+      "additionalProperties": false,
+      "properties": {
+        "score": {
+          "anyOf": [
+            {
+              "maximum": 10,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Score"
+        },
+        "reason": {
+          "maxLength": 350,
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "score",
+        "reason"
+      ],
+      "title": "VisualCriterion",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "description": {
+      "maxLength": 600,
+      "minLength": 1,
+      "title": "Description",
+      "type": "string"
+    },
+    "visible_business_terms": {
+      "$ref": "#/$defs/SourceFact"
+    },
+    "design_score": {
+      "anyOf": [
+        {
+          "maximum": 10,
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Design Score"
+    },
+    "design_score_reason": {
+      "maxLength": 450,
+      "minLength": 1,
+      "title": "Design Score Reason",
+      "type": "string"
+    },
+    "readability": {
+      "$ref": "#/$defs/VisualCriterion"
+    },
+    "b2b_offer_clarity": {
+      "$ref": "#/$defs/VisualCriterion"
+    },
+    "navigation_clarity": {
+      "$ref": "#/$defs/VisualCriterion"
+    },
+    "contact_visibility": {
+      "$ref": "#/$defs/VisualCriterion"
+    },
+    "ordering_path_clarity": {
+      "$ref": "#/$defs/VisualCriterion"
+    },
+    "recommendations": {
+      "items": {
+        "maxLength": 400,
+        "minLength": 1,
+        "pattern": "^[^{}]*$",
+        "type": "string"
+      },
+      "maxItems": 5,
+      "title": "Recommendations",
+      "type": "array"
+    },
+    "limitations": {
+      "items": {
+        "maxLength": 400,
+        "minLength": 1,
+        "pattern": "^[^{}]*$",
+        "type": "string"
+      },
+      "maxItems": 5,
+      "minItems": 1,
+      "title": "Limitations",
+      "type": "array"
+    }
+  },
+  "required": [
+    "description",
+    "visible_business_terms",
+    "design_score",
+    "design_score_reason",
+    "readability",
+    "b2b_offer_clarity",
+    "navigation_clarity",
+    "contact_visibility",
+    "ordering_path_clarity",
+    "recommendations",
+    "limitations"
+  ],
+  "title": "ImageAnalysis",
+  "type": "object"
+}

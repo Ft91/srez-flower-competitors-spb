@@ -1,0 +1,345 @@
+{
+  "$defs": {
+    "CitedFinding": {
+      "additionalProperties": false,
+      "properties": {
+        "text": {
+          "maxLength": 350,
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "evidence_quotes": {
+          "items": {
+            "maxLength": 400,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 3,
+          "minItems": 1,
+          "title": "Evidence Quotes",
+          "type": "array"
+        }
+      },
+      "required": [
+        "text",
+        "evidence_quotes"
+      ],
+      "title": "CitedFinding",
+      "type": "object"
+    },
+    "PriceExample": {
+      "additionalProperties": false,
+      "properties": {
+        "flower": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Flower",
+          "type": "string"
+        },
+        "variety": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Только собственное название сорта, например Explorer. Кустовая, махровый цветок, аромат — описания, не имена сортов; тогда null.",
+          "title": "Variety"
+        },
+        "stem_length_cm": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "maximum": 300,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Stem Length Cm"
+        },
+        "stems_per_box": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Stems Per Box"
+        },
+        "amount": {
+          "exclusiveMinimum": 0,
+          "title": "Amount",
+          "type": "number"
+        },
+        "currency": {
+          "anyOf": [
+            {
+              "maxLength": 10,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "RUB/USD/EUR/CNY и др., только если валюта указана.",
+          "title": "Currency"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "enum": [
+                "stem",
+                "bunch",
+                "box"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Unit"
+        },
+        "price_kind": {
+          "enum": [
+            "exact",
+            "from"
+          ],
+          "title": "Price Kind",
+          "type": "string"
+        },
+        "valid_date_label": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Дата/период цены из источника. Дату скачивания не использовать.",
+          "title": "Valid Date Label"
+        },
+        "conditions": {
+          "anyOf": [
+            {
+              "maxLength": 300,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Conditions"
+        },
+        "evidence_quotes": {
+          "items": {
+            "maxLength": 400,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 3,
+          "minItems": 1,
+          "title": "Evidence Quotes",
+          "type": "array"
+        }
+      },
+      "required": [
+        "flower",
+        "variety",
+        "stem_length_cm",
+        "stems_per_box",
+        "amount",
+        "currency",
+        "unit",
+        "price_kind",
+        "valid_date_label",
+        "conditions",
+        "evidence_quotes"
+      ],
+      "title": "PriceExample",
+      "type": "object"
+    },
+    "SourceFact": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "stated_by_supplier",
+            "not_stated",
+            "conflicting"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "maxLength": 450,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Value"
+        },
+        "evidence_quotes": {
+          "items": {
+            "maxLength": 400,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 3,
+          "title": "Evidence Quotes",
+          "type": "array"
+        }
+      },
+      "required": [
+        "status",
+        "value",
+        "evidence_quotes"
+      ],
+      "title": "SourceFact",
+      "type": "object"
+    },
+    "WholesaleFacts": {
+      "additionalProperties": false,
+      "properties": {
+        "assortment": {
+          "$ref": "#/$defs/SourceFact",
+          "description": "Виды цветов и ассортимент. Рекламные числа — заявления поставщика."
+        },
+        "origin_countries": {
+          "$ref": "#/$defs/SourceFact",
+          "description": "Заявленные страны происхождения, не страны доставки."
+        },
+        "farm_names": {
+          "$ref": "#/$defs/SourceFact",
+          "description": "ТОЛЬКО собственные имена/названия конкретных ферм. Число плантаций или страны не являются именами. Нет имён => status=not_stated, value=null, evidence_quotes=[]."
+        },
+        "minimum_order": {
+          "$ref": "#/$defs/SourceFact",
+          "description": "Минимальный заказ: сумма, коробки, пачки или стебли; не смешивать единицы."
+        },
+        "packaging_and_mixes": {
+          "$ref": "#/$defs/SourceFact",
+          "description": "Пачки, коробки, количество стеблей и возможность микса."
+        },
+        "availability_and_preorder": {
+          "$ref": "#/$defs/SourceFact",
+          "description": "Наличие, предзаказ, сроки, регулярные поставки; без гарантии актуальности."
+        },
+        "delivery": {
+          "$ref": "#/$defs/SourceFact",
+          "description": "Условия доставки именно по СПб; другие регионы явно отделять."
+        },
+        "payment": {
+          "$ref": "#/$defs/SourceFact",
+          "description": "Предоплата, способы оплаты, отсрочка: только прямо указанные условия."
+        },
+        "claims": {
+          "$ref": "#/$defs/SourceFact",
+          "description": "Претензии по качеству и количеству, сроки, брак, компенсации."
+        },
+        "ordering": {
+          "$ref": "#/$defs/SourceFact",
+          "description": "Как оформить заказ: форма, менеджер, магазин, мессенджер. Не оценивать работу канала."
+        },
+        "quality_promises": {
+          "$ref": "#/$defs/SourceFact",
+          "description": "Рекламные обещания качества/стабильности. Это не доказательства исполнения."
+        }
+      },
+      "required": [
+        "assortment",
+        "origin_countries",
+        "farm_names",
+        "minimum_order",
+        "packaging_and_mixes",
+        "availability_and_preorder",
+        "delivery",
+        "payment",
+        "claims",
+        "ordering",
+        "quality_promises"
+      ],
+      "title": "WholesaleFacts",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "summary": {
+      "maxLength": 700,
+      "minLength": 1,
+      "title": "Summary",
+      "type": "string"
+    },
+    "facts": {
+      "$ref": "#/$defs/WholesaleFacts"
+    },
+    "price_examples": {
+      "description": "До 6 примеров; это не полный прайс и не поиск самой низкой цены.",
+      "items": {
+        "$ref": "#/$defs/PriceExample"
+      },
+      "maxItems": 6,
+      "title": "Price Examples",
+      "type": "array"
+    },
+    "claimed_advantages": {
+      "items": {
+        "$ref": "#/$defs/CitedFinding"
+      },
+      "maxItems": 3,
+      "title": "Claimed Advantages",
+      "type": "array"
+    },
+    "purchase_constraints": {
+      "items": {
+        "$ref": "#/$defs/CitedFinding"
+      },
+      "maxItems": 3,
+      "title": "Purchase Constraints",
+      "type": "array"
+    },
+    "questions_to_supplier": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 5,
+      "title": "Questions To Supplier",
+      "type": "array"
+    },
+    "limitations": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 5,
+      "title": "Limitations",
+      "type": "array"
+    }
+  },
+  "required": [
+    "summary",
+    "facts",
+    "price_examples",
+    "claimed_advantages",
+    "purchase_constraints",
+    "questions_to_supplier",
+    "limitations"
+  ],
+  "title": "CompetitorAnalysis",
+  "type": "object"
+}
