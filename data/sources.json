@@ -1,0 +1,47 @@
+[
+  {
+    "company": "7flowers",
+    "name": "7ЦВЕТОВ",
+    "url": "https://www.7flowers.ru/?geo=spb",
+    "page_captured_at_utc": "2026-09-18T19:29:43.131Z",
+    "image": "7flowers/home_view.png",
+    "sha256": "ccce34bf05a51441f45de761ebfb30fa98f80f12f83540005d116ce66d405dc7",
+    "note": "Время относится к текстовому снимку страницы в исходном реестре; отдельное время создания PNG не зафиксировано."
+  },
+  {
+    "company": "optflor",
+    "name": "OptFlor",
+    "url": "https://www.optflor.com/",
+    "page_captured_at_utc": "2026-09-18T19:35:40.368Z",
+    "image": "optflor/home_view.png",
+    "sha256": "2498abcba0c8b49597673fe10cfa178e0f79aeb3e6d5417ac92b64bc0b4cdb66",
+    "note": "Время относится к текстовому снимку страницы в исходном реестре; отдельное время создания PNG не зафиксировано."
+  },
+  {
+    "company": "floradomspb",
+    "name": "ФлораДомСПБ",
+    "url": "https://floradomspb.ru/",
+    "page_captured_at_utc": "2026-09-18T19:40:41.143Z",
+    "image": "floradomspb/home_view.png",
+    "sha256": "30ef9fba731e30e0a305dc14ba8a9581acbb11becda4321d6230530be6405c61",
+    "note": "Время относится к текстовому снимку страницы в исходном реестре; отдельное время создания PNG не зафиксировано."
+  },
+  {
+    "company": "florografia",
+    "name": "Флорография",
+    "url": "https://florografia.ru/",
+    "page_captured_at_utc": "2026-09-18T19:45:45.894Z",
+    "image": "florografia/home_view.png",
+    "sha256": "38fd7e72446dfc87a38e14ce8095b717855da070032ad37fcf8c786ac93bd076",
+    "note": "Время относится к текстовому снимку страницы в исходном реестре; отдельное время создания PNG не зафиксировано."
+  },
+  {
+    "company": "tsvetomania",
+    "name": "Цветомания опт",
+    "url": "https://opt.tsvetomania.ru/",
+    "page_captured_at_utc": "2026-09-18T19:48:03.139Z",
+    "image": "tsvetomania/home_view.png",
+    "sha256": "84d56763625adecff4e887d0ac5442f57e755ad4ff0b7bedf36f905330012d78",
+    "note": "Время относится к текстовому снимку страницы в исходном реестре; отдельное время создания PNG не зафиксировано."
+  }
+]
