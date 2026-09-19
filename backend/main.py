@@ -31,7 +31,7 @@ def create_app(settings: Settings | None = None, service: AnalysisService | None
 
     app = FastAPI(
         title="Анализ конкурентов — опт цветов, СПб",
-        description="Этап 6: интерфейс, сохранённые материалы, анализ и сравнение поставщиков.",
+        description="Интерфейс, сохранённые материалы, анализ и сравнение поставщиков.",
         version="0.6.0", lifespan=lifespan,
     )
     app.add_middleware(TrustedHostMiddleware, allowed_hosts=["127.0.0.1", "localhost", "testserver"])

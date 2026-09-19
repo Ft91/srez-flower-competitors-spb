@@ -48,7 +48,7 @@ def workspace_router(history):
             }
             items[slug][kind] = record
             records.append(record)
-        items["optflor"]["notes"] = ["В этом учебном ответе модель назвала цветы срезанными. Короткий исходный текст этого не подтверждает: требуется сверка с каталогом."]
+        items["optflor"]["notes"] = ["В этом сохранённом ответе модель назвала цветы срезанными. Короткий исходный текст этого не подтверждает: требуется сверка с каталогом."]
         return {"example": True, "items": list(items.values()), "records": records,
                 "summary": {"competitors": 5, "captures": 0, "analyses": len(records)}}
 
